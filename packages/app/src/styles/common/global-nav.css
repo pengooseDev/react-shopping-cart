@@ -5,37 +5,42 @@
 }
 
 .global-nav-button-box {
+  position: fixed;
+  right: 1rem;
+  top: 1rem;
   display: flex;
+  flex-direction: column;
   gap: 5px;
-
-  margin: 10px 0;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .global-nav-button {
-  background-color: #ffffff;
-  border: 1px solid #222222;
-  border-radius: 8px;
-  box-sizing: border-box;
-  color: #222222;
   cursor: pointer;
-  display: inline-block;
   font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
-    "Helvetica Neue", sans-serif;
-  font-size: 16px;
+    'Helvetica Neue', sans-serif;
   font-weight: 600;
   line-height: 20px;
   margin: 0;
   outline: none;
-  padding: 13px 23px;
-  position: relative;
+  padding: 4px 8px;
   text-align: center;
   text-decoration: none;
   touch-action: manipulation;
-  transition: box-shadow 0.2s, -ms-transform 0.1s, -webkit-transform 0.1s,
-    transform 0.1s;
+  transition: ease-in-out 0.15s;
   user-select: none;
   -webkit-user-select: none;
   width: auto;
+  border-radius: 4px;
+}
+
+.global-nav-button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .global-nav-button:focus-visible {
