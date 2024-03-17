@@ -1,18 +1,18 @@
 import { Routes } from './router.type';
 import {
-  Home,
   List,
   Detail,
   Cart,
   Order,
   OrderList,
   OrderDetail,
+  NotFound,
 } from '../pages';
 
 export const ROUTES: Routes = {
   HOME: {
     PATH: '/',
-    COMPONENT: Home,
+    COMPONENT: List,
   },
 
   LIST: {
@@ -43,5 +43,10 @@ export const ROUTES: Routes = {
   ORDER_DETAIL: {
     PATH: '/orderDetail',
     COMPONENT: OrderDetail,
+  },
+
+  NOT_FOUND: {
+    PATH: '*',
+    COMPONENT: NotFound,
   },
 } as const;
