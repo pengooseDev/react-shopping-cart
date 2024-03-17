@@ -1,16 +1,11 @@
 import { Link } from 'react-router-dom';
-import { ROUTES } from '../router/router.constant';
+import { ROUTES } from './router.constant';
 
 /**
  * Figma 상에 존재하지 않지만, 페이지별 이동의 편의성을 위해 추가한 임시 컴포넌트입니다
  */
 
 const FLOAT_ROUTES = {
-  HOME: {
-    ...ROUTES.HOME,
-    TITLE: '홈으로',
-  },
-
   LIST: {
     ...ROUTES.LIST,
     TITLE: '상품 목록',
