@@ -1,10 +1,13 @@
+import { Layout } from './layouts/Layout';
 import { FloatRouter } from './router/FloatRouter';
 import { Router } from './router/Router';
 
 function App() {
   return (
     <>
-      <Router />
+      <Layout>
+        <Router />
+      </Layout>
       <FloatRouter />
     </>
   );
