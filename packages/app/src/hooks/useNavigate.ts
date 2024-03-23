@@ -1,8 +1,8 @@
-import { useNavigate as useReactNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/router/router.constant';
 
-export const useNavigate = () => {
-  const navigate = useReactNavigate();
+export const useNavaigate = () => {
+  const navigate = useNavigate();
 
   const moveHome = () => navigate(ROUTES.HOME.PATH);
   const moveList = () => navigate(ROUTES.LIST.PATH);
