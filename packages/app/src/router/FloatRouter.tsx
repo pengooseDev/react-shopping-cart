@@ -39,9 +39,9 @@ const FLOAT_ROUTES = {
 
 export const FloatRouter = () => {
   return (
-    <div className='global-nav-button-box'>
+    <div className="global-nav-button-box">
       {Object.entries(FLOAT_ROUTES).map(([KEY, { PATH, TITLE }]) => (
-        <Link key={KEY} className='global-nav-button' to={PATH}>
+        <Link key={KEY} className="global-nav-button" to={PATH}>
           {TITLE}
         </Link>
       ))}
