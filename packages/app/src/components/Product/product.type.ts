@@ -1,6 +1,5 @@
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
+import { Product } from '@/types';
+
+export interface ProductComponent extends Product {
+  onClick?: () => void;
 }

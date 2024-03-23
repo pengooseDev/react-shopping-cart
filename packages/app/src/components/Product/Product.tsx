@@ -1,8 +1,8 @@
-import { Product as ProductData } from './product.type';
+import { ProductComponent } from './product.type';
 
-export const Product = ({ image, name, price }: Omit<ProductData, 'id'>) => {
+export const Product = ({ image, name, price, onClick }: ProductComponent) => {
   return (
-    <div>
+    <div onClick={onClick}>
       <img src={image} alt={name} />
       <div className="flex justify-between w-280 p-5">
         <div className="product-info">

@@ -1,8 +1,8 @@
 import { Navigation } from '@/components/navigation/Navigation';
-import { useNavaigate } from '@/hooks/useNavigate';
+import { useNavigate } from '@/hooks/useNavigate';
 
 export const TopNavigation = () => {
-  const { moveHome, moveCart, moveOrderList } = useNavaigate();
+  const { moveHome, moveCart, moveOrderList } = useNavigate();
 
   return (
     <Navigation
