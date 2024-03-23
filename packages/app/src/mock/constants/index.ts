@@ -1,4 +1,4 @@
-import { products } from './product';
+import { products } from '../product/product';
 
 export const DUMMY = {
   PRODUCT: {

@@ -1,5 +1,5 @@
 import { Product } from '@/components/Product/Product';
-import { DUMMY } from '@/mock';
+import { DUMMY } from '@/mock/constants';
 
 export const List = () => {
   return (
