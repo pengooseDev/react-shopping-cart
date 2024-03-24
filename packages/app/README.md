@@ -53,6 +53,15 @@
   - [ ] Google Analytics
   - [ ] Google Tag Manager
 
+## Model(Stage Manager)
+
+- @pengoose/jotai 사용
+  - [> npm](https://www.npmjs.com/package/@pengoose/jotai)
+  - [> Docs](https://github.com/pengooseDev/goose_module/blob/main/jotai/README.md)
+
+* [ ] Getter와 Setter를 하나의 객체 내부에서 관리한다.
+* [ ] 상태를 변경하는 로직은 오직 Setter를 통해서만 가능하다.
+
 ---
 
 # 고민한 사항
