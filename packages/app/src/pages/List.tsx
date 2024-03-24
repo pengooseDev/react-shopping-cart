@@ -1,27 +1,34 @@
 import { Event } from '@/components/container/Event/Event';
 import { Product } from '@/components/product/Product';
-import { useNavigate } from '@/hooks/useNavigate';
+import { useNavigate, useCart } from '@/hooks';
 import { DUMMY } from '@/mock/constants';
 
 export const List = () => {
   const { moveOrderDetail } = useNavigate();
-  const addCart = (id: number) => console.log(`add ${id}`);
+  const { addOne, items } = useCart();
 
   return (
     <section className="product-container">
-      {DUMMY.PRODUCT.LIST.map(({ id, name, price, image }) => (
-        <Product>
-          <Event.onClick key={id} onClick={() => moveOrderDetail(id)}>
-            <Product.Image src={image} alt={name} />
-          </Event.onClick>
+      {DUMMY.PRODUCT.LIST.map((product) => {
+        const { id, name, price, image } = product;
 
-          <Product.InfoContainer>
-            <Product.Info name={name} price={price} />
-            <Event.onClick key={id} onClick={() => addCart(id)}>
-              <Product.Image src={'assets/svgs/cart.svg'} alt="장바구니" />
+        return (
+          <Product key={id}>
+            <Event.onClick onClick={() => moveOrderDetail(id)}>
+              <Product.Image src={image} alt={name} />
             </Event.onClick>
-          </Product.InfoContainer>
-        </Product>
+
+            <Product.InfoContainer>
+              <Product.Info name={name} price={price} />
+              <Event.onClick onClick={() => addOne(product)}>
+                <Product.Image src={'assets/svgs/cart.svg'} alt="장바구니" />
+              </Event.onClick>
+            </Product.InfoContainer>
+          </Product>
+        );
+      })}
+      {items?.map((v) => (
+        <div key={v.id}>{v.name}</div>
       ))}
     </section>
   );

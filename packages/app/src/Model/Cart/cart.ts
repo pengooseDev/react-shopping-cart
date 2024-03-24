@@ -1,12 +1,14 @@
-import { AtomManager } from '@pengoose/jotai';
 import { atom } from 'jotai';
 import { Product } from '@/types';
+import { AtomManager } from '@/Model/manager/atomManager';
 import { Cart, FindProductIndexProps } from './cart.type';
 
 class CartManager extends AtomManager<Cart> {
   public static INITIAL_DATA: Cart = {
     items: [],
   };
+
+  public static DEFAULT_CHANGE_UNIT = 1;
 
   constructor(initialState: Cart = CartManager.INITIAL_DATA) {
     super(initialState);
@@ -29,15 +31,6 @@ class CartManager extends AtomManager<Cart> {
         const isExist = productIndex !== -1;
 
         switch (isExist) {
-          case false: {
-            set(this.atom, (prev: Cart) => ({
-              ...prev,
-              items: [...prev.items, { ...product, amount }],
-            }));
-
-            break;
-          }
-
           case true: {
             set(this.atom, (prev: Cart) => ({
               ...prev,
@@ -51,6 +44,15 @@ class CartManager extends AtomManager<Cart> {
             break;
           }
 
+          case false: {
+            set(this.atom, (prev: Cart) => ({
+              ...prev,
+              items: [...prev.items, { ...product, amount }],
+            }));
+
+            break;
+          }
+
           default: {
             throw new Error('Unexpected case');
           }
@@ -58,28 +60,78 @@ class CartManager extends AtomManager<Cart> {
       }
     ),
 
+    addOne: atom(null, (_, set, product: Product) => {
+      set(this.actions.add, {
+        amount: CartManager.DEFAULT_CHANGE_UNIT,
+        product,
+      });
+    }),
+
+    reduce: atom(
+      null,
+      (get, set, { amount, product }: { amount: number; product: Product }) => {
+        const { items } = get(this.atom);
+
+        const productIndex = this.findProductIndex({
+          cartItems: items,
+          product,
+        });
+        const isExist = productIndex !== -1;
+
+        switch (isExist) {
+          case true: {
+            set(this.atom, (prev: Cart) => ({
+              ...prev,
+              items: prev.items.map((item, i) =>
+                i === productIndex
+                  ? { ...item, amount: item.amount - amount }
+                  : item
+              ),
+            }));
+
+            break;
+          }
+
+          case false: {
+            return;
+          }
+
+          default: {
+            throw new Error('Unexpected case');
+          }
+        }
+      }
+    ),
+
+    reduceOne: atom(null, (_, set, product: Product) => {
+      set(this.actions.reduce, {
+        amount: CartManager.DEFAULT_CHANGE_UNIT,
+        product,
+      });
+    }),
+
     remove: atom(null, (get, set, product: Product) => {
       const { items } = get(this.atom);
 
-      const index = this.findProductIndex({
+      const productIndex = this.findProductIndex({
         cartItems: items,
         product,
       });
+      const isExist = productIndex !== -1;
 
-      if (index === -1) return;
+      switch (isExist) {
+        case true: {
+          set(this.atom, (prev: Cart) => ({
+            ...prev,
+            items: prev.items.filter((_, i) => i !== productIndex),
+          }));
 
-      if (items[index].amount === 1) {
-        set(this.atom, (prev: Cart) => ({
-          ...prev,
-          items: prev.items.filter((item) => item.id !== product.id),
-        }));
-      } else {
-        set(this.atom, (prev: Cart) => ({
-          ...prev,
-          items: prev.items.map((item, i) =>
-            i === index ? { ...item, amount: item.amount - 1 } : item
-          ),
-        }));
+          break;
+        }
+
+        case false: {
+          return;
+        }
       }
     }),
 
@@ -99,8 +151,4 @@ class CartManager extends AtomManager<Cart> {
   };
 }
 
-const initialData: Cart = {
-  items: [],
-};
-
-export const cartManager = new CartManager(initialData);
+export const cartManager = new CartManager(CartManager.INITIAL_DATA);

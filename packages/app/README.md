@@ -222,3 +222,20 @@ export const ProductComponent = ({ image, name, price }: ProductData) => {
 ```
 
 기존 컴포넌트로 돌아간 뒤, onClick(onDetail, onCart)로직만 props 전달하는 방법도 있지만 우선 이렇게 적용해보았습니다.
+
+---
+
+# 2. AddCart UX 고려하기
+
+상품을 추가하는 경우는 다음과 같습니다.
+![alt text](https://i.imgur.com/eOkyVFw.png)
+
+List 페이지의 우측 하단 Cart SVG를 클릭할 경우, 두 가지 로직을 구현할 수 있습니다.
+
+```
+1. 장바구니에 상품이 추가.
+2. 장바구니 페이지로 이동.
+```
+
+보편적인 사용자는 **1번**을 기대합니다.
+또한, `추가되는 개수`는 1개일 것이라고 예상하는 것이 보편적입니다.

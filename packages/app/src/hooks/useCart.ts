@@ -1,10 +1,10 @@
-import { useManager } from '@pengoose/jotai';
 import { cartManager } from '@/Model/Cart/cart';
+import { useManager } from '@/hooks/useManager';
 
 export const useCart = () => {
   const {
     selectors: { items },
-    actions: { add, remove, clear },
+    actions: { add, addOne, reduce, reduceOne, remove, clear },
   } = useManager(cartManager);
 
   return {
@@ -13,6 +13,9 @@ export const useCart = () => {
 
     // Actions
     add,
+    addOne,
+    reduce,
+    reduceOne,
     remove,
     clear,
   };
