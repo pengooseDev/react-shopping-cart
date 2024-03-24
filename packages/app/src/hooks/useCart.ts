@@ -4,7 +4,7 @@ import { useManager } from '@/hooks/useManager';
 export const useCart = () => {
   const {
     selectors: { items },
-    actions: { add, addOne, reduce, reduceOne, remove, clear },
+    actions: { add, reduce, remove, clear },
   } = useManager(cartManager);
 
   return {
@@ -13,9 +13,7 @@ export const useCart = () => {
 
     // Actions
     add,
-    addOne,
     reduce,
-    reduceOne,
     remove,
     clear,
   };

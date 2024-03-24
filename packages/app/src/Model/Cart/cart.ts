@@ -19,9 +19,26 @@ class CartManager extends AtomManager<Cart> {
   };
 
   public actions = {
+    /**
+     * @description
+     * - 장바구니에 상품을 추가합니다.
+     * - 이미 존재하는 상품이라면 수량을 증가시킵니다.
+     * - 존재하지 않는 상품이라면 새로 추가합니다.
+     * - 추가할 상품의 수량이 주어지지 않으면 기본값인 1이 증가합니다.
+     * @param {number} amount - 상품 수량
+     * @param {Product} product - 상품 정보
+     * @returns {void}
+     */
     add: atom(
       null,
-      (get, set, { amount, product }: { amount: number; product: Product }) => {
+      (
+        get,
+        set,
+        {
+          amount = CartManager.DEFAULT_CHANGE_UNIT,
+          product,
+        }: { amount?: number; product: Product }
+      ) => {
         const { items } = get(this.atom);
 
         const productIndex = this.findProductIndex({
@@ -60,16 +77,16 @@ class CartManager extends AtomManager<Cart> {
       }
     ),
 
-    addOne: atom(null, (_, set, product: Product) => {
-      set(this.actions.add, {
-        amount: CartManager.DEFAULT_CHANGE_UNIT,
-        product,
-      });
-    }),
-
     reduce: atom(
       null,
-      (get, set, { amount, product }: { amount: number; product: Product }) => {
+      (
+        get,
+        set,
+        {
+          amount = CartManager.DEFAULT_CHANGE_UNIT,
+          product,
+        }: { amount?: number; product: Product }
+      ) => {
         const { items } = get(this.atom);
 
         const productIndex = this.findProductIndex({
@@ -102,13 +119,6 @@ class CartManager extends AtomManager<Cart> {
         }
       }
     ),
-
-    reduceOne: atom(null, (_, set, product: Product) => {
-      set(this.actions.reduce, {
-        amount: CartManager.DEFAULT_CHANGE_UNIT,
-        product,
-      });
-    }),
 
     remove: atom(null, (get, set, product: Product) => {
       const { items } = get(this.atom);

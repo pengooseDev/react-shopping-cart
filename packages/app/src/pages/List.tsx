@@ -5,7 +5,7 @@ import { DUMMY } from '@/mock/constants';
 
 export const List = () => {
   const { moveOrderDetail } = useNavigate();
-  const { addOne, items } = useCart();
+  const { add, items } = useCart();
 
   return (
     <section className="product-container">
@@ -20,7 +20,7 @@ export const List = () => {
 
             <Product.InfoContainer>
               <Product.Info name={name} price={price} />
-              <Event.onClick onClick={() => addOne(product)}>
+              <Event.onClick onClick={() => add({ product })}>
                 <Product.Image src={'assets/svgs/cart.svg'} alt="장바구니" />
               </Event.onClick>
             </Product.InfoContainer>
