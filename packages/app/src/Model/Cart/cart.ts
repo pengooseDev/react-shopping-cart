@@ -42,7 +42,7 @@ class CartManager extends AtomManager<Cart> {
         const { items } = get(this.atom);
 
         const productIndex = this.findProductIndex({
-          cartItems: items,
+          items,
           product,
         });
         const isExist = productIndex !== -1;
@@ -95,7 +95,7 @@ class CartManager extends AtomManager<Cart> {
         const { items } = get(this.atom);
 
         const productIndex = this.findProductIndex({
-          cartItems: items,
+          items,
           product,
         });
         const isExist = productIndex !== -1;
@@ -131,7 +131,7 @@ class CartManager extends AtomManager<Cart> {
       const { items } = get(this.atom);
 
       const productIndex = this.findProductIndex({
-        cartItems: items,
+        items,
         product,
       });
       const isExist = productIndex !== -1;
@@ -169,13 +169,13 @@ class CartManager extends AtomManager<Cart> {
    * @description
    * - 상품이 존재하는지 확인합니다.
    * @param {FindProductIndexProps} param0 - 상품 정보
-   * @returns {number} - 상품 인덱스
+   * @returns {number} - 상품 인덱스 또는 -1(존재하지 않음)
    */
   private findProductIndex = ({
-    cartItems,
+    items,
     product,
   }: FindProductIndexProps): number => {
-    return cartItems.findIndex((item) => item.id === product.id);
+    return items.findIndex((item) => item.id === product.id);
   };
 }
 

@@ -9,6 +9,6 @@ export interface Cart {
 }
 
 export interface FindProductIndexProps {
-  cartItems: Product[];
+  items: Product[];
   product: Product;
 }
