@@ -1,8 +1,8 @@
-import { ProductComponent } from './product.type';
+import { Product as ProductData } from '@/types';
 
-export const Product = ({ image, name, price, onClick }: ProductComponent) => {
+export const Product = ({ image, name, price }: ProductData) => {
   return (
-    <div onClick={onClick}>
+    <div>
       <img src={image} alt={name} />
       <div className="flex justify-between w-280 p-5">
         <div className="product-info">
