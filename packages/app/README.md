@@ -18,9 +18,10 @@
 
 - [x] 상품들은 n x 4 레이아웃으로 보여진다.
 - [x] 상품들에는 사진, 이름, 금액이 보여진다.
-- [ ] 장바구니 버튼을 클릭하면 (\*\*) / 자유롭게 구현 후 내용 작성
 - [x] 상품을 클릭하면 상품상세 페이지로 이동한다.
   - [x] Product 컴포넌트의 props에 onClick 로직을 제거한다.
+- 장바구니 버튼을 클릭하면 (\*\*) / 자유롭게 구현 후 내용 작성
+  - [ ] 나의 장바구니에 물품이 추가된다.
 
 ## 선택 요구사항 (심화)
 
@@ -60,7 +61,7 @@
 
 고차 컴포넌트를 이용해 로직을 작성한 경험이 전무하여, 세션에서 들었던 내용을 학습하여 적용해보고자 함. (현재 고차컴포넌트를 언제 적용해야 좋은지, 어떤 trade-off가 있는지 잘 몰라 여기저기 시도하며 직접 느껴보는 중입니다.)
 
-#### 초기 설계
+### 1. 초기 설계
 
 ```ts
 import { useNavigate } from 'react-router-dom';
@@ -108,7 +109,7 @@ export const List = () => {
 성능상 이슈 + 굳이 withRouter를 사용할 필요가 없다고 판단하여
 결론 : 걷어냄
 
-#### 최종 로직
+### 2. 변경된 로직
 
 ```tsx
 export const List = () => {
@@ -135,3 +136,80 @@ Route 관련 로직은 커스텀 훅으로 로직 대체
 
 느낀 점 :
 HOC과 같은 경우 동적으로 값을 받을때보다, 정적인 컴포넌트에 대해 사용하는 것이 더 효율적이라고 판단됨.
+
+### 3. 새로운 문제 직면 (컴포넌트 내부 서로 다른 onClick 적용 불가)
+
+해결책: Product 컴포넌트 합성컴포넌트로 분리
+
+```tsx
+import { Product as ProductData } from '@/types';
+
+const Container = ({ children }: React.PropsWithChildren) => {
+  return <div>{children}</div>;
+};
+
+const Image = ({ src, alt }: { src: string; alt: string }) => {
+  return <img src={src} alt={alt} />;
+};
+
+const InfoContainer = ({ children }: React.PropsWithChildren) => {
+  return <div className="flex justify-between w-280 p-5">{children}</div>;
+};
+
+const Info = ({ name, price }: Omit<ProductData, 'id' | 'image'>) => {
+  return (
+    <div className="product-info">
+      <span className="product-info__name">{name}</span>
+      <span className="product-info__price">{price}원</span>
+    </div>
+  );
+};
+
+export const Product = Object.assign(Container, { Image, InfoContainer, Info });
+```
+
+```tsx
+export const List = () => {
+  const { moveOrderDetail } = useNavigate();
+  const addCart = (id: number) => console.log(`add ${id}`);
+
+  return (
+    <section className="product-container">
+      {DUMMY.PRODUCT.LIST.map(({ id, name, price, image }) => (
+        <Product>
+          <Event.onClick key={id} onClick={() => moveOrderDetail(id)}>
+            <Product.Image src={image} alt={name} />
+          </Event.onClick>
+          <Product.InfoContainer>
+            <Product.Info name={name} price={price} />
+            <Event.onClick key={id} onClick={() => addCart(id)}>
+              <Product.Image src={'assets/svgs/cart.svg'} alt="장바구니" />
+            </Event.onClick>
+          </Product.InfoContainer>
+        </Product>
+      ))}
+    </section>
+  );
+};
+```
+
+View에서 로직을 분리하고싶은 욕심이 들어가있는 코드입니다.
+
+```tsx
+export const ProductComponent = ({ image, name, price }: ProductData) => {
+  return (
+    <div>
+      <img src={image} alt={name} />
+      <div className="flex justify-between w-280 p-5">
+        <div className="product-info">
+          <span className="product-info__name">{name}</span>
+          <span className="product-info__price">{price}원</span>
+        </div>
+        <img src="assets/svgs/cart.svg" alt="장바구니" />
+      </div>
+    </div>
+  );
+};
+```
+
+기존 컴포넌트로 돌아간 뒤, onClick(onDetail, onCart)로직만 props 전달하는 방법도 있지만 우선 이렇게 적용해보았습니다.
