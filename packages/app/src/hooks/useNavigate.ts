@@ -10,7 +10,8 @@ export const useNavigate = () => {
   const moveCart = () => navigate(ROUTES.CART.PATH);
   const moveOrder = () => navigate(ROUTES.ORDER.PATH);
   const moveOrderList = () => navigate(ROUTES.ORDER_LIST.PATH);
-  const moveOrderDetail = () => navigate(ROUTES.ORDER_DETAIL.PATH);
+  const moveOrderDetail = (id: number) =>
+    navigate(`${ROUTES.ORDER_DETAIL.PATH}/${id}`);
 
   return {
     moveHome,
