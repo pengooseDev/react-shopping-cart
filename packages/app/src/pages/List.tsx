@@ -1,4 +1,4 @@
-import { Product } from '@/components/Product/Product';
+import { Product } from '@/components/product/Product';
 import { withRouter } from '@/hoc/withRouter';
 import { DUMMY } from '@/mock/constants';
 
