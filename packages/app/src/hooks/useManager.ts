@@ -9,7 +9,21 @@ const createUseAction = (atom: WritableAtom<any, any, void>) => {
   return () => useSetAtom(atom);
 };
 
+/**
+ * @description
+ * - atomManager의 selectors에 useAtomValue을 래핑하여 반환합니다.
+ * - atomManager의 actions에 useSetAtom을 래핑하여 반환합니다.
+ * - 각 Atom의 type을 추론하여 반환합니다.
+ *
+ * @param manager
+ * @returns
+ */
 export const useManager = <T extends AtomManager<any>>(manager: T) => {
+  /**
+   * @description
+   * - atomManager의 selectors에 useAtomValue을 래핑하여 반환합니다.
+   * - 각 Atom의 type을 추론하여 반환합니다.
+   */
   const selectors = Object.fromEntries(
     Object.entries(manager.selectors).map(([key, atom]) => [
       key,
@@ -21,6 +35,11 @@ export const useManager = <T extends AtomManager<any>>(manager: T) => {
       : never;
   };
 
+  /**
+   * @description
+   * - atomManager의 actions에 useSetAtom을 래핑하여 반환합니다.
+   * - 각 Atom의 type을 추론하여 반환합니다.
+   */
   const actions = Object.fromEntries(
     Object.entries(manager.actions).map(([key, actionAtom]) => [
       key,
