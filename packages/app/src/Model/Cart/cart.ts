@@ -69,14 +69,19 @@ class CartManager extends AtomManager<Cart> {
 
             break;
           }
-
-          default: {
-            throw new Error('Unexpected case');
-          }
         }
       }
     ),
 
+    /**
+     * @description
+     * - 장바구니에 상품을 감소시킵니다.
+     * - 상품 수량이 0이 되면 상품을 삭제합니다.
+     * - 감소할 상품의 수량이 주어지지 않으면 기본값인 1이 감소합니다.
+     * @param {number} amount - 상품 수량
+     * @param {Product} product - 상품 정보
+     * @returns {void}
+     */
     reduce: atom(
       null,
       (
@@ -112,14 +117,16 @@ class CartManager extends AtomManager<Cart> {
           case false: {
             return;
           }
-
-          default: {
-            throw new Error('Unexpected case');
-          }
         }
       }
     ),
 
+    /**
+     * @description
+     * - 장바구니에 상품을 삭제합니다.
+     * @param {Product} product - 상품 정보
+     * @returns {void}
+     */
     remove: atom(null, (get, set, product: Product) => {
       const { items } = get(this.atom);
 
@@ -145,6 +152,11 @@ class CartManager extends AtomManager<Cart> {
       }
     }),
 
+    /**
+     * @description
+     * - 장바구니를 비웁니다.
+     * @returns {void}
+     */
     clear: atom(null, (_, set) => {
       set(this.atom, (prev: Cart) => ({
         ...prev,
@@ -153,6 +165,12 @@ class CartManager extends AtomManager<Cart> {
     }),
   };
 
+  /**
+   * @description
+   * - 상품이 존재하는지 확인합니다.
+   * @param {FindProductIndexProps} param0 - 상품 정보
+   * @returns {number} - 상품 인덱스
+   */
   private findProductIndex = ({
     cartItems,
     product,
