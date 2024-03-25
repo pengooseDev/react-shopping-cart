@@ -5,7 +5,7 @@ const createUseSelector = <T>(atom: Atom<T>) => {
   return () => useAtomValue(atom);
 };
 
-const createUseAction = (atom: WritableAtom<any, any, void>) => {
+const createUseAction = <T>(atom: WritableAtom<T, any, void>) => {
   return () => useSetAtom(atom);
 };
 
@@ -14,7 +14,6 @@ const createUseAction = (atom: WritableAtom<any, any, void>) => {
  * - atomManager의 selectors에 useAtomValue을 래핑하여 반환합니다.
  * - atomManager의 actions에 useSetAtom을 래핑하여 반환합니다.
  * - 각 Atom의 type을 추론하여 반환합니다.
- *
  * @param manager
  * @returns
  */
@@ -45,7 +44,7 @@ export const useManager = <T extends AtomManager<any>>(manager: T) => {
       key,
       createUseAction(actionAtom)(),
     ])
-  ) as unknown as {
+  ) as {
     [P in keyof T['actions']]: T['actions'][P] extends WritableAtom<
       any,
       infer U,
