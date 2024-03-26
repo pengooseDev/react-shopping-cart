@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { Product } from '@/types';
-import { AtomManager } from '@/Model/manager/atomManager';
+import { AtomManager } from '@/Model/manager';
 import { Cart, HasProductProps } from './cart.type';
 
 class CartManager extends AtomManager<Cart> {

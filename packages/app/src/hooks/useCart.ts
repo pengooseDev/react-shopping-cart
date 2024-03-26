@@ -1,5 +1,5 @@
 import { cartManager } from '@/Model/Cart/cart';
-import { useManager } from '@/hooks/useManager';
+import { useManager } from '@/Model/manager';
 
 export const useCart = () => {
   const {
