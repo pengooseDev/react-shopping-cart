@@ -6,10 +6,6 @@ import { Cart, HasProductProps } from './cart.type';
 class CartManager extends AtomManager<Cart> {
   public static DEFAULT_CHANGE_UNIT = 1;
 
-  constructor(initialState: Cart) {
-    super(initialState);
-  }
-
   public selectors = {
     items: atom((get) => {
       const { items } = get(this.atom);
