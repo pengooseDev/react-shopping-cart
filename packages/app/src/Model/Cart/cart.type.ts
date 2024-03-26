@@ -4,11 +4,13 @@ interface Item extends Product {
   amount: number;
 }
 
+type Items = Map<Product['id'], Item>;
+
 export interface Cart {
-  items: Item[];
+  items: Items;
 }
 
-export interface FindProductIndexProps {
-  items: Product[];
+export interface HasProductProps {
+  items: Items;
   product: Product;
 }

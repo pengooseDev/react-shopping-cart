@@ -8,7 +8,7 @@ export const List = () => {
   const { add, items } = useCart();
 
   return (
-    <section className="product-container">
+    <section className='product-container'>
       {DUMMY.PRODUCT.LIST.map((product) => {
         const { id, name, price, image } = product;
 
@@ -21,14 +21,16 @@ export const List = () => {
             <Product.InfoContainer>
               <Product.Info name={name} price={price} />
               <Event.onClick onClick={() => add({ product })}>
-                <Product.Image src={'assets/svgs/cart.svg'} alt="장바구니" />
+                <Product.Image src={'assets/svgs/cart.svg'} alt='장바구니' />
               </Event.onClick>
             </Product.InfoContainer>
           </Product>
         );
       })}
       {items?.map((v) => (
-        <div key={v.id}>{v.name}</div>
+        <div key={v.id}>
+          {v.name} : {v.amount}개
+        </div>
       ))}
     </section>
   );

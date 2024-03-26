@@ -1,21 +1,21 @@
 import { atom } from 'jotai';
 import { Product } from '@/types';
 import { AtomManager } from '@/Model/manager/atomManager';
-import { Cart, FindProductIndexProps } from './cart.type';
+import { Cart, HasProductProps } from './cart.type';
 
 class CartManager extends AtomManager<Cart> {
-  public static INITIAL_DATA: Cart = {
-    items: [],
-  };
-
   public static DEFAULT_CHANGE_UNIT = 1;
 
-  constructor(initialState: Cart = CartManager.INITIAL_DATA) {
+  constructor(initialState: Cart) {
     super(initialState);
   }
 
   public selectors = {
-    items: atom((get) => get(this.atom).items),
+    items: atom((get) => {
+      const { items } = get(this.atom);
+
+      return Array.from(items.values());
+    }),
   };
 
   public actions = {
@@ -41,31 +41,47 @@ class CartManager extends AtomManager<Cart> {
       ) => {
         const { items } = get(this.atom);
 
-        const productIndex = this.findProductIndex({
+        const hasProduct = this.hasProduct({
           items,
           product,
         });
-        const isExist = productIndex !== -1;
 
-        switch (isExist) {
+        switch (hasProduct) {
           case true: {
-            set(this.atom, (prev: Cart) => ({
-              ...prev,
-              items: prev.items.map((item, i) =>
-                i === productIndex
-                  ? { ...item, amount: item.amount + amount }
-                  : item
-              ),
-            }));
+            set(this.atom, (prev: Cart) => {
+              const newItems = new Map(prev.items);
+              const prevProduct = newItems.get(product.id);
+
+              if (!prevProduct) return prev;
+
+              newItems.set(product.id, {
+                ...prevProduct,
+                amount: prevProduct.amount + amount,
+              });
+
+              return {
+                ...prev,
+                items: newItems,
+              };
+            });
 
             break;
           }
 
           case false: {
-            set(this.atom, (prev: Cart) => ({
-              ...prev,
-              items: [...prev.items, { ...product, amount }],
-            }));
+            set(this.atom, (prev: Cart) => {
+              const newItems = new Map(prev.items);
+
+              newItems.set(product.id, {
+                ...product,
+                amount,
+              });
+
+              return {
+                ...prev,
+                items: newItems,
+              };
+            });
 
             break;
           }
@@ -94,22 +110,40 @@ class CartManager extends AtomManager<Cart> {
       ) => {
         const { items } = get(this.atom);
 
-        const productIndex = this.findProductIndex({
+        const hasProduct = this.hasProduct({
           items,
           product,
         });
-        const isExist = productIndex !== -1;
 
-        switch (isExist) {
+        switch (hasProduct) {
           case true: {
-            set(this.atom, (prev: Cart) => ({
-              ...prev,
-              items: prev.items.map((item, i) =>
-                i === productIndex
-                  ? { ...item, amount: item.amount - amount }
-                  : item
-              ),
-            }));
+            set(this.atom, (prev: Cart) => {
+              const newItems = new Map(prev.items);
+              const prevProduct = newItems.get(product.id);
+
+              if (!prevProduct) return prev;
+
+              const newAmount = prevProduct.amount - amount;
+
+              if (newAmount <= 0) {
+                newItems.delete(product.id);
+
+                return {
+                  ...prev,
+                  items: newItems,
+                };
+              }
+
+              newItems.set(product.id, {
+                ...prevProduct,
+                amount: newAmount,
+              });
+
+              return {
+                ...prev,
+                items: newItems,
+              };
+            });
 
             break;
           }
@@ -130,18 +164,22 @@ class CartManager extends AtomManager<Cart> {
     remove: atom(null, (get, set, product: Product) => {
       const { items } = get(this.atom);
 
-      const productIndex = this.findProductIndex({
+      const hasProduct = this.hasProduct({
         items,
         product,
       });
-      const isExist = productIndex !== -1;
 
-      switch (isExist) {
+      switch (hasProduct) {
         case true: {
-          set(this.atom, (prev: Cart) => ({
-            ...prev,
-            items: prev.items.filter((_, i) => i !== productIndex),
-          }));
+          set(this.atom, (prev: Cart) => {
+            const newItems = new Map(prev.items);
+            newItems.delete(product.id);
+
+            return {
+              ...prev,
+              items: newItems,
+            };
+          });
 
           break;
         }
@@ -160,23 +198,25 @@ class CartManager extends AtomManager<Cart> {
     clear: atom(null, (_, set) => {
       set(this.atom, (prev: Cart) => ({
         ...prev,
-        items: [],
+        items: new Map(),
       }));
     }),
   };
 
   /**
    * @description
-   * - 상품이 존재하는지 확인합니다.
-   * @param {FindProductIndexProps} param0 - 상품 정보
-   * @returns {number} - 상품 인덱스 또는 -1(존재하지 않음)
+   * - 장바구니에 상품이 존재하는지 확인합니다.
+   * @param {Items} items - 장바구니 상품 목록
+   * @param {Product} product - 상품 정보
+   * @returns {boolean}
    */
-  private findProductIndex = ({
-    items,
-    product,
-  }: FindProductIndexProps): number => {
-    return items.findIndex((item) => item.id === product.id);
+  private hasProduct = ({ items, product }: HasProductProps): boolean => {
+    return items.has(product.id);
   };
 }
 
-export const cartManager = new CartManager(CartManager.INITIAL_DATA);
+const initialState: Cart = {
+  items: new Map(),
+};
+
+export const cartManager = new CartManager(initialState);
