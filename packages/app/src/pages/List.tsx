@@ -1,21 +1,46 @@
+import { useEffect, useState } from 'react';
 import { Event } from '@/components/container/Event/Event';
 import { Product } from '@/components/product/Product';
 import { useNavigate, useCart } from '@/hooks';
-import { DUMMY } from '@/mock/constants';
+import { Product as ProductData } from '@/types';
+import axios from 'axios';
+// import { DUMMY } from '@/mock/constants';
 
 export const List = () => {
   const { moveOrderDetail } = useNavigate();
   const { add, items } = useCart();
+  const [listData, setListData] = useState<undefined | ProductData[]>();
+
+  useEffect(() => {
+    const getListData = async () => {
+      try {
+        const { data } = await axios('http://localhost:5173/products');
+        await axios.post('http://localhost:5173/products', {
+          products: {
+            id: 1,
+            price: 10000,
+            name: '치킨',
+            imageUrl: 'http://example.com/chicken.jpg',
+          },
+        });
+        setListData(data.response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getListData();
+  }, []);
 
   return (
     <section className='product-container'>
-      {DUMMY.PRODUCT.LIST.map((product) => {
-        const { id, name, price, image } = product;
+      {listData?.map((product: ProductData) => {
+        const { id, name, price, imageUrl } = product;
 
         return (
           <Product key={id}>
             <Event.onClick onClick={() => moveOrderDetail(id)}>
-              <Product.Image src={image} alt={name} />
+              <Product.Image src={imageUrl} alt={name} />
             </Event.onClick>
 
             <Product.InfoContainer>

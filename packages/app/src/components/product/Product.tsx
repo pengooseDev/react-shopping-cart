@@ -9,14 +9,14 @@ const Image = ({ src, alt }: { src: string; alt: string }) => {
 };
 
 const InfoContainer = ({ children }: React.PropsWithChildren) => {
-  return <div className="flex justify-between w-280 p-5">{children}</div>;
+  return <div className='flex justify-between w-280 p-5'>{children}</div>;
 };
 
-const Info = ({ name, price }: Omit<ProductData, 'id' | 'image'>) => {
+const Info = ({ name, price }: Omit<ProductData, 'id' | 'imageUrl'>) => {
   return (
-    <div className="product-info">
-      <span className="product-info__name">{name}</span>
-      <span className="product-info__price">{price}원</span>
+    <div className='product-info'>
+      <span className='product-info__name'>{name}</span>
+      <span className='product-info__price'>{price}원</span>
     </div>
   );
 };
