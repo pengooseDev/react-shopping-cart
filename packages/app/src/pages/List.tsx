@@ -3,8 +3,7 @@ import { Event } from '@/components/container/Event/Event';
 import { Product } from '@/components/product/Product';
 import { useNavigate, useCart } from '@/hooks';
 import { Product as ProductData } from '@/types';
-import axios from 'axios';
-// import { DUMMY } from '@/mock/constants';
+import { Api } from '@/api/api';
 
 export const List = () => {
   const { moveOrderDetail } = useNavigate();
@@ -14,16 +13,9 @@ export const List = () => {
   useEffect(() => {
     const getListData = async () => {
       try {
-        const { data } = await axios('http://localhost:5173/products');
-        await axios.post('http://localhost:5173/products', {
-          products: {
-            id: 1,
-            price: 10000,
-            name: '치킨',
-            imageUrl: 'http://example.com/chicken.jpg',
-          },
-        });
-        setListData(data.response);
+        const products: ProductData[] = await Api.list.getProducts();
+
+        setListData(products);
       } catch (error) {
         console.error(error);
       }
@@ -33,7 +25,7 @@ export const List = () => {
   }, []);
 
   return (
-    <section className='product-container'>
+    <section className="product-container">
       {listData?.map((product: ProductData) => {
         const { id, name, price, imageUrl } = product;
 
@@ -46,7 +38,7 @@ export const List = () => {
             <Product.InfoContainer>
               <Product.Info name={name} price={price} />
               <Event.onClick onClick={() => add({ product })}>
-                <Product.Image src={'assets/svgs/cart.svg'} alt='장바구니' />
+                <Product.Image src={'assets/svgs/cart.svg'} alt="장바구니" />
               </Event.onClick>
             </Product.InfoContainer>
           </Product>
