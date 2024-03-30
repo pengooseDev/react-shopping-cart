@@ -6,7 +6,7 @@ import { Product as ProductData } from '@/types';
 import { Api } from '@/api/api';
 
 export const List = () => {
-  const { moveOrderDetail } = useNavigate();
+  const { moveDetail } = useNavigate();
   const { add, items } = useCart();
   const [listData, setListData] = useState<undefined | ProductData[]>();
 
@@ -25,20 +25,20 @@ export const List = () => {
   }, []);
 
   return (
-    <section className="product-container">
+    <section className='product-container'>
       {listData?.map((product: ProductData) => {
         const { id, name, price, imageUrl } = product;
 
         return (
           <Product key={id}>
-            <Event.onClick onClick={() => moveOrderDetail(id)}>
+            <Event.onClick onClick={() => moveDetail(id)}>
               <Product.Image src={imageUrl} alt={name} />
             </Event.onClick>
 
             <Product.InfoContainer>
               <Product.Info name={name} price={price} />
               <Event.onClick onClick={() => add({ product })}>
-                <Product.Image src={'assets/svgs/cart.svg'} alt="장바구니" />
+                <Product.Image src={'assets/svgs/cart.svg'} alt='장바구니' />
               </Event.onClick>
             </Product.InfoContainer>
           </Product>

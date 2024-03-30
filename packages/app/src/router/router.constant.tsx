@@ -21,7 +21,7 @@ export const ROUTES: Routes = {
   },
 
   DETAIL: {
-    PATH: '/detail',
+    PATH: '/detail/:id',
     COMPONENT: Detail,
   },
 
