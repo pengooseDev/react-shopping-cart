@@ -1,26 +1,33 @@
+import { Hr, ProductDetail } from '@/components/productDetail/ProductDetail';
+import { useCart } from '@/hooks';
+import { Product } from '@/types';
+import { Formatter } from '@/utils/formatter';
+
 export const Detail = () => {
+  const { add } = useCart();
+  const product: Product = {
+    id: 1,
+    name: 'PET보틀-정사각(420ml)',
+    price: 5000,
+    imageUrl: '/assets/images/product.png',
+  } as const;
+
   return (
-    <div className='product-detail-container'>
-      <div className='flex-col-center w-520'>
-        <img
-          className='w-480 h-480 mb-10'
-          src='./assets/images/product.png'
-          alt='PET보틀-정사각(420ml)'
-        />
-        <div className='product-detail-info'>
-          <span className='product-detail-info__name'>
-            PET보틀-정사각(420ml)
-          </span>
-          <hr className='divide-line-gray my-20' />
-          <div className='flex justify-between'>
-            <span>금액</span>
-            <span className='product-detail-info__price'>43,000원</span>
-          </div>
-        </div>
-        <button className='product-detail-button flex-center mt-20'>
-          장바구니
-        </button>
-      </div>
-    </div>
+    <ProductDetail>
+      <ProductDetail.Image src={product.imageUrl} alt={product.name} />
+      <ProductDetail.InfoContainer>
+        <ProductDetail.Title>{product.name}</ProductDetail.Title>
+        <Hr />
+        <ProductDetail.Price>
+          {Formatter.currency(product.price)}
+        </ProductDetail.Price>
+      </ProductDetail.InfoContainer>
+      <button
+        onClick={() => add({ product })}
+        className='product-detail-button flex-center mt-20'
+      >
+        장바구니
+      </button>
+    </ProductDetail>
   );
 };
