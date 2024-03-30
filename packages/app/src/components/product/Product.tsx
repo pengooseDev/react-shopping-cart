@@ -1,4 +1,5 @@
 import { Product as ProductData } from '@/types';
+import { Formatter } from '@/utils/formatter';
 
 const Container = ({ children }: React.PropsWithChildren) => {
   return <div>{children}</div>;
@@ -16,7 +17,7 @@ const Info = ({ name, price }: Omit<ProductData, 'id' | 'imageUrl'>) => {
   return (
     <div className='product-info'>
       <span className='product-info__name'>{name}</span>
-      <span className='product-info__price'>{price}원</span>
+      <span className='product-info__price'>{Formatter.currency(price)}</span>
     </div>
   );
 };
