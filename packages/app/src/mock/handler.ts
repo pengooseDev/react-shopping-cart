@@ -1,38 +1,6 @@
 import { Product } from '@/types';
 import { http, HttpResponse } from 'msw';
-
-const DEFAULT_PRODUCTS_LIST = [
-  {
-    id: 1,
-    price: 10000,
-    name: '치킨',
-    imageUrl: 'http://example.com/chicken.jpg',
-  },
-  {
-    id: 2,
-    price: 20000,
-    name: '피자',
-    imageUrl: 'http://example.com/pizza.jpg',
-  },
-  {
-    id: 3,
-    price: 30000,
-    name: '햄버거',
-    imageUrl: 'http://example.com/hamburger.jpg',
-  },
-  {
-    id: 4,
-    price: 40000,
-    name: '커피',
-    imageUrl: 'http://example.com/coffee.jpg',
-  },
-  {
-    id: 5,
-    price: 50000,
-    name: '맥주',
-    imageUrl: 'http://example.com/beer.jpg',
-  },
-];
+import { DEFAULT_PRODUCTS_LIST } from './product/product.constant';
 
 // const DEFAULT_CARTS_LIST = [
 //   {
