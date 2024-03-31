@@ -4,11 +4,18 @@ import { Product } from '@/types';
 import { Formatter } from '@/utils/formatter';
 
 export const Detail = () => {
+  const {
+    locationState: { product },
+  } = useNavigate();
+  const { name, price, imageUrl }: Product = product;
   const { add } = useCart();
-  const { locationState } = useNavigate();
-  const { name, price, imageUrl } = locationState.product;
+  const { moveCart } = useNavigate();
 
-  const product: Product = locationState.product;
+  const onCartClick = () => {
+    add({ product });
+    moveCart();
+  };
+
   return (
     <ProductDetail>
       <ProductDetail.Image src={imageUrl} alt={name} />
@@ -18,7 +25,7 @@ export const Detail = () => {
         <ProductDetail.Price>{Formatter.currency(price)}</ProductDetail.Price>
       </ProductDetail.InfoContainer>
       <button
-        onClick={() => add({ product })}
+        onClick={onCartClick}
         className="product-detail-button flex-center mt-20"
       >
         장바구니
