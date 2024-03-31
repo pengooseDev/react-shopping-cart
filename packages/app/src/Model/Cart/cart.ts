@@ -12,6 +12,34 @@ class CartManager extends AtomManager<Cart> {
 
       return Array.from(items.values());
     }),
+
+    allChecked: atom((get) => {
+      const { allChecked } = get(this.atom);
+
+      return allChecked;
+    }),
+
+    checkedItems: atom((get) => {
+      const { items } = get(this.atom);
+
+      return Array.from(items.values()).filter((item) => item.checked);
+    }),
+
+    checkedTotalAmount: atom((get) => {
+      const { items } = get(this.atom);
+
+      return Array.from(items.values())
+        .filter((item) => item.checked)
+        .reduce((acc, item) => acc + item.amount, 0);
+    }),
+
+    checkedTotalPrice: atom((get) => {
+      const { items } = get(this.atom);
+
+      return Array.from(items.values())
+        .filter((item) => item.checked)
+        .reduce((acc, item) => acc + item.amount * item.price, 0);
+    }),
   };
 
   public actions = {
@@ -71,6 +99,7 @@ class CartManager extends AtomManager<Cart> {
               newItems.set(product.id, {
                 ...product,
                 amount,
+                checked: true,
               });
 
               return {
@@ -197,6 +226,52 @@ class CartManager extends AtomManager<Cart> {
         items: new Map(),
       }));
     }),
+
+    /**
+     * @description
+     * - 장바구니 상품 선택 여부를 토글합니다.
+     */
+    toggleChecked: atom(null, (_, set, id: Product['id']) => {
+      set(this.atom, (prev: Cart) => {
+        const newItems = new Map(prev.items);
+        const prevProduct = newItems.get(id);
+
+        if (!prevProduct) return prev;
+
+        newItems.set(id, {
+          ...prevProduct,
+          checked: !prevProduct.checked,
+        });
+
+        return {
+          ...prev,
+          items: newItems,
+        };
+      });
+    }),
+
+    /**
+     * @description
+     * - 장바구니 상품 전체 선택 여부를 토글합니다.
+     */
+    toggleAllChecked: atom(null, (_, set) => {
+      set(this.atom, (prev: Cart) => {
+        const newItems = new Map(prev.items);
+
+        for (const [id, item] of newItems) {
+          newItems.set(id, {
+            ...item,
+            checked: !prev.allChecked,
+          });
+        }
+
+        return {
+          ...prev,
+          items: newItems,
+          allChecked: !prev.allChecked,
+        };
+      });
+    }),
   };
 
   /**
@@ -213,6 +288,7 @@ class CartManager extends AtomManager<Cart> {
 
 const initialState: Cart = {
   items: new Map(),
+  allChecked: true,
 };
 
 export const cartManager = new CartManager(initialState);
