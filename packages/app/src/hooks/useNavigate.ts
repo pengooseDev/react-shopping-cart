@@ -1,36 +1,44 @@
-import { useNavigate as useReactNavigate } from 'react-router-dom';
+import { useLocation, useNavigate as useReactNavigate } from 'react-router-dom';
 import { ROUTES } from '@/router/router.constant';
 import { Parser } from '@/router/utils/Parser';
+import { Product } from '@/types';
+
+interface NavigateProps {
+  state?: {
+    product: Product;
+  };
+}
 
 export const useNavigate = () => {
   const navigate = useReactNavigate();
+  const { state: locationState } = useLocation();
 
-  const moveHome = () => {
-    return navigate(ROUTES.HOME.PATH);
+  const moveHome = ({ state }: NavigateProps = {}) => {
+    return navigate(ROUTES.HOME.PATH, { state });
   };
 
-  const moveList = () => {
-    return navigate(ROUTES.LIST.PATH);
+  const moveList = ({ state }: NavigateProps = {}) => {
+    return navigate(ROUTES.LIST.PATH, { state });
   };
 
-  const moveDetail = (id: number) => {
-    return navigate(Parser.dynamicRoute(ROUTES.DETAIL.PATH, id));
+  const moveDetail = (id: number, { state }: NavigateProps = {}) => {
+    return navigate(Parser.dynamicRoute(ROUTES.DETAIL.PATH, id), { state });
   };
 
-  const moveCart = () => {
-    return navigate(ROUTES.CART.PATH);
+  const moveCart = ({ state }: NavigateProps = {}) => {
+    return navigate(ROUTES.CART.PATH, { state });
   };
 
-  const moveOrder = () => {
-    return navigate(ROUTES.ORDER.PATH);
+  const moveOrder = ({ state }: NavigateProps = {}) => {
+    return navigate(ROUTES.ORDER.PATH, { state });
   };
 
-  const moveOrderList = () => {
-    return navigate(ROUTES.ORDER_LIST.PATH);
+  const moveOrderList = ({ state }: NavigateProps = {}) => {
+    return navigate(ROUTES.ORDER_LIST.PATH, { state });
   };
 
-  const moveOrderDetail = (id: number) => {
-    return navigate(`${ROUTES.ORDER_DETAIL.PATH}/${id}`);
+  const moveOrderDetail = (id: number, { state }: NavigateProps = {}) => {
+    return navigate(`${ROUTES.ORDER_DETAIL.PATH}/${id}`, { state });
   };
 
   return {
@@ -41,5 +49,6 @@ export const useNavigate = () => {
     moveOrder,
     moveOrderList,
     moveOrderDetail,
+    locationState,
   };
 };

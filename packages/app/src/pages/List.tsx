@@ -25,20 +25,28 @@ export const List = () => {
   }, []);
 
   return (
-    <section className='product-container'>
+    <section className="product-container">
       {listData?.map((product: ProductData) => {
         const { id, name, price, imageUrl } = product;
 
         return (
           <Product key={id}>
-            <Event.onClick onClick={() => moveDetail(id)}>
+            <Event.onClick
+              onClick={() =>
+                moveDetail(id, {
+                  state: {
+                    product,
+                  },
+                })
+              }
+            >
               <Product.Image src={imageUrl} alt={name} />
             </Event.onClick>
 
             <Product.InfoContainer>
               <Product.Info name={name} price={price} />
               <Event.onClick onClick={() => add({ product })}>
-                <Product.Image src={'assets/svgs/cart.svg'} alt='장바구니' />
+                <Product.Image src={'assets/svgs/cart.svg'} alt="장바구니" />
               </Event.onClick>
             </Product.InfoContainer>
           </Product>
