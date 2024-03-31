@@ -11,11 +11,6 @@ const FLOAT_ROUTES = {
     TITLE: '상품 목록',
   },
 
-  DETAIL: {
-    ...ROUTES.DETAIL,
-    TITLE: '상품 상세',
-  },
-
   CART: {
     ...ROUTES.CART,
     TITLE: '장바구니',
