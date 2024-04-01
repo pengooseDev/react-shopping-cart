@@ -1,44 +1,73 @@
 import { atom } from 'jotai';
 import { Product } from '@/types';
 import { AtomManager } from '@/Model/manager';
-import { Cart, HasProductProps } from './cart.type';
+import { Cart, HasProductProps, Item } from './cart.type';
 
-class CartManager extends AtomManager<Cart> {
+export class CartManager extends AtomManager<Cart> {
   public static DEFAULT_CHANGE_UNIT = 1;
 
+  /**
+   * @description
+   * - 선택된 상품들의 총 가격을 반환합니다.
+   * @param {Item[]} items - 선택된 상품 목록
+   * @returns {number}
+   */
+  public static getTotalPrice = (items: Item[]) => {
+    return items.reduce((acc, item) => acc + item.amount * item.price, 0);
+  };
+
+  /**
+   * @description
+   * - 선택된 상품들의 총 수량을 반환합니다.
+   * @param {Item[]} items - 선택된 상품 목록
+   * @returns {number}
+   */
+  public static getTotalAmount = (items: Item[]) => {
+    return items.reduce((acc, item) => acc + item.amount, 0);
+  };
+
+  /**
+   * @description
+   * - 모든 상품이 선택되었는지 여부를 반환합니다.
+   * @param {Item[]} items - 상품 목록
+   * @returns {boolean}
+   */
+  public static isAllChecked = (items: Item[]) => {
+    return items.every((item) => item.checked);
+  };
+
   public selectors = {
+    /**
+     * @description
+     * - 장바구니 상품 목록을 반환합니다.
+     * @returns {Item[]}
+     */
     items: atom((get) => {
       const { items } = get(this.atom);
 
       return Array.from(items.values());
     }),
 
-    allChecked: atom((get) => {
-      const { allChecked } = get(this.atom);
-
-      return allChecked;
-    }),
-
+    /**
+     * @description
+     * - 장바구니 상품 중 선택된 상품들을 반환합니다.
+     * @returns {Item[]}
+     */
     checkedItems: atom((get) => {
       const { items } = get(this.atom);
 
       return Array.from(items.values()).filter((item) => item.checked);
     }),
 
-    checkedTotalAmount: atom((get) => {
-      const { items } = get(this.atom);
+    /**
+     * @description
+     * - 주문 목록을 반환합니다.
+     * @returns {Item[]}
+     */
+    orderItems: atom((get) => {
+      const { orderItems } = get(this.atom);
 
-      return Array.from(items.values())
-        .filter((item) => item.checked)
-        .reduce((acc, item) => acc + item.amount, 0);
-    }),
-
-    checkedTotalPrice: atom((get) => {
-      const { items } = get(this.atom);
-
-      return Array.from(items.values())
-        .filter((item) => item.checked)
-        .reduce((acc, item) => acc + item.amount * item.price, 0);
+      return Array.from(orderItems.values());
     }),
   };
 
@@ -217,13 +246,50 @@ class CartManager extends AtomManager<Cart> {
 
     /**
      * @description
+     * - 선택된 상품을 주문 목록으로 이동합니다.
+     * - 선택된 상품을 장바구니에서 삭제합니다.
+     */
+    order: atom(null, (_, set) => {
+      set(this.atom, (prev: Cart) => {
+        const newItems = new Map(prev.items);
+        const newOrderItems = new Map(prev.orderItems);
+
+        for (const [id, item] of newItems) {
+          if (item.checked) {
+            newOrderItems.set(id, item);
+            newItems.delete(id);
+          }
+        }
+
+        return {
+          ...prev,
+          items: newItems,
+          orderItems: newOrderItems,
+        };
+      });
+    }),
+
+    /**
+     * @description
      * - 장바구니를 비웁니다.
      * @returns {void}
      */
-    clear: atom(null, (_, set) => {
+    clearItems: atom(null, (_, set) => {
       set(this.atom, (prev: Cart) => ({
         ...prev,
         items: new Map(),
+      }));
+    }),
+
+    /**
+     * @description
+     * - 주문 목록을 비웁니다.
+     * @returns {void}
+     */
+    clearOrderItems: atom(null, (_, set) => {
+      set(this.atom, (prev: Cart) => ({
+        ...prev,
+        orderItems: new Map(),
       }));
     }),
 
@@ -288,6 +354,7 @@ class CartManager extends AtomManager<Cart> {
 
 const initialState: Cart = {
   items: new Map(),
+  orderItems: new Map(),
   allChecked: true,
 };
 

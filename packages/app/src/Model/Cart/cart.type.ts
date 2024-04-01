@@ -5,10 +5,11 @@ export interface Item extends Product {
   checked: boolean;
 }
 
-type Items = Map<Product['id'], Item>;
+export type Items = Map<Product['id'], Item>;
 
 export interface Cart {
   items: Items;
+  orderItems: Items;
   allChecked: boolean;
 }
 
