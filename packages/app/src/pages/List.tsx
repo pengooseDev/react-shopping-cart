@@ -8,6 +8,7 @@ import { QUERY_CONFIG } from '@/api/queryConfig';
 export const List = () => {
   const { moveDetail } = useNavigate();
   const { add } = useCart();
+  // fallback Data : DEFAULT_PRODUCTS_LIST
   const { data: listData } = useQuery(QUERY_CONFIG.PRODUCT.GET);
 
   return (
