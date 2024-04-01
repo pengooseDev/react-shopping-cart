@@ -1,28 +1,14 @@
-import { useEffect, useState } from 'react';
 import { Event } from '@/components/container/Event/Event';
 import { Product } from '@/components/product/Product';
 import { useNavigate, useCart } from '@/hooks';
 import { Product as ProductData } from '@/types';
-import { Api } from '@/api/api';
+import { useQuery } from '@tanstack/react-query';
+import { QUERY_CONFIG } from '@/api/queryConfig';
 
 export const List = () => {
   const { moveDetail } = useNavigate();
   const { add, items } = useCart();
-  const [listData, setListData] = useState<undefined | ProductData[]>();
-
-  useEffect(() => {
-    const getListData = async () => {
-      try {
-        const products: ProductData[] = await Api.list.getProducts();
-
-        setListData(products);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getListData();
-  }, []);
+  const { data: listData } = useQuery(QUERY_CONFIG.PRODUCT.GET);
 
   return (
     <section className="product-container">

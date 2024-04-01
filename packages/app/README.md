@@ -1,6 +1,6 @@
 ## 필수 요구사항
 
-- [ ] TanStack Query를 기반으로 상태 분리
+- [x] TanStack Query를 기반으로 상태 분리
   - [ ] 낙관적 업데이트를 활용하여 UX/UI 증진
 - [ ] MSW를 활용한 API mocking
 - [ ] Endpoint만 변경하면 언제든 Real API를 바라볼 수 있다고 가정하고 상상한다.

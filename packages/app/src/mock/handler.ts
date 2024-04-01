@@ -2,73 +2,9 @@ import { Product } from '@/types';
 import { http, HttpResponse } from 'msw';
 import { DEFAULT_PRODUCTS_LIST } from './product/product.constant';
 
-// const DEFAULT_CARTS_LIST = [
-//   {
-//     id: 1,
-//     product: {
-//       name: 'test',
-//       price: 1234,
-//       imageUrl: 'test.com',
-//       id: 1,
-//     },
-//   },
-//   {
-//     id: 5,
-//     product: {
-//       name: 'tes11111t',
-//       price: 1234,
-//       imageUrl: 'test.com',
-//       id: 10,
-//     },
-//   },
-// ];
-
-// const DEFAULT_ORDERS_LIST = [
-//   {
-//     id: 1,
-//     orderDetails: [
-//       {
-//         id: 1,
-//         price: 10000,
-//         name: '치킨',
-//         imageUrl: 'http://example.com/chicken.jpg',
-//         quantity: 5,
-//       },
-//       {
-//         id: 2,
-//         price: 20000,
-//         name: '피자',
-//         imageUrl: 'http://example.com/pizza.jpg',
-//         quantity: 3,
-//       },
-//     ],
-//   },
-//   {
-//     id: 2,
-//     orderDetails: [
-//       {
-//         id: 1,
-//         price: 10000,
-//         name: '치킨',
-//         imageUrl: 'http://example.com/chicken.jpg',
-//         quantity: 5,
-//       },
-//       {
-//         id: 2,
-//         price: 20000,
-//         name: '피자',
-//         imageUrl: 'http://example.com/pizza.jpg',
-//         quantity: 3,
-//       },
-//     ],
-//   },
-// ];
-
 const allProducts = new Map(
   DEFAULT_PRODUCTS_LIST.map((post) => [post.id, post])
 );
-// const allCarts = new Map(DEFAULT_CARTS_LIST.map((post) => [post.id, post]));
-// const allOrders = new Map(DEFAULT_ORDERS_LIST.map((post) => [post.id, post]));
 
 export const handlers = [
   // 상품 목록 조회
