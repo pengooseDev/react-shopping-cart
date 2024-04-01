@@ -1,3 +1,4 @@
+import { DEFAULT_PRODUCTS_LIST } from '@/mock/product/product.constant';
 import { Api } from './api';
 
 export const QUERY_CONFIG = {
@@ -5,6 +6,7 @@ export const QUERY_CONFIG = {
     GET: {
       queryKey: ['products'],
       queryFn: Api.list.getProducts,
+      initialData: DEFAULT_PRODUCTS_LIST,
     },
   },
 } as const;
