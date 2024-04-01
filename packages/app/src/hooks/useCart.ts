@@ -3,30 +3,33 @@ import { useManager } from '@/Model/manager';
 
 export const useCart = () => {
   const {
-    selectors: {
-      items,
-      allChecked,
-      checkedItems,
-      checkedTotalAmount,
-      checkedTotalPrice,
+    selectors: { items, orderItems, checkedItems },
+    actions: {
+      add,
+      reduce,
+      remove,
+      clearItems,
+      clearOrderItems,
+      toggleChecked,
+      toggleAllChecked,
+      order,
     },
-    actions: { add, reduce, remove, clear, toggleChecked, toggleAllChecked },
   } = useManager(cartManager);
 
   return {
     // Selectors
     items,
-    allChecked,
+    orderItems,
     checkedItems,
-    checkedTotalAmount,
-    checkedTotalPrice,
 
     // Actions
     add,
     reduce,
     remove,
-    clear,
+    clearItems,
+    clearOrderItems,
     toggleChecked,
     toggleAllChecked,
+    order,
   };
 };

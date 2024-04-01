@@ -1,17 +1,32 @@
 import { Item } from '@/Model/Cart/cart.type';
 import { CartList } from '@/components/cart/CartList';
-import { useCart } from '@/hooks';
+import { useCart, useNavigate } from '@/hooks';
 import { Formatter } from '@/utils/formatter';
+import { CartManager } from '@/Model/Cart/cart';
 
 export const Cart = () => {
+  const { moveOrder } = useNavigate();
   const {
     items,
+    checkedItems,
+    order,
     toggleChecked,
     toggleAllChecked,
-    allChecked,
-    checkedTotalAmount,
-    checkedTotalPrice,
+    clearItems,
   } = useCart();
+
+  const checkedTotalAmount = CartManager.getTotalAmount(checkedItems);
+  const checkedTotalPrice = CartManager.getTotalPrice(checkedItems);
+  const allChecked = CartManager.isAllChecked(items);
+
+  const onOrder = () => {
+    if (checkedTotalAmount === 0) return;
+
+    order();
+    moveOrder();
+  };
+
+  const optionalButtonClassname = checkedTotalAmount === 0 ? 'disabled' : '';
 
   return (
     <>
@@ -36,7 +51,9 @@ export const Cart = () => {
                   선택해제
                 </label>
               </div>
-              <button className="delete-button">상품삭제</button>
+              <button onClick={clearItems} className="delete-button hover">
+                상품삭제
+              </button>
             </div>
             <h3 className="cart-title">
               든든배송 상품({checkedTotalAmount}개)
@@ -64,7 +81,10 @@ export const Cart = () => {
                 </span>
               </div>
               <div className="flex-center mt-30 mx-10">
-                <button className="primary-button flex-center">
+                <button
+                  onClick={onOrder}
+                  className={`${optionalButtonClassname} primary-button flex-center`}
+                >
                   주문하기({checkedTotalAmount}개)
                 </button>
               </div>

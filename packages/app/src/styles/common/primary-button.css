@@ -12,3 +12,8 @@
   color: white;
   padding: 14px 28px;
 }
+
+.disabled {
+  background: #ccc;
+  color: #666;
+}
