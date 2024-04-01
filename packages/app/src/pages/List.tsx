@@ -7,7 +7,7 @@ import { QUERY_CONFIG } from '@/api/queryConfig';
 
 export const List = () => {
   const { moveDetail } = useNavigate();
-  const { add, items } = useCart();
+  const { add } = useCart();
   const { data: listData } = useQuery(QUERY_CONFIG.PRODUCT.GET);
 
   return (
@@ -38,13 +38,6 @@ export const List = () => {
           </Product>
         );
       })}
-      {items?.map((v) => (
-        <div key={v.id}>
-          {v.name} : {v.amount}개
-        </div>
-      ))}
     </section>
   );
 };
-
-// onClick 로직을 분리하기 위해선 이렇게 합성컴포넌트가 강제됨. onClick을 여러개 주입하기보단 이게 나아보이긴 한데 흠..
