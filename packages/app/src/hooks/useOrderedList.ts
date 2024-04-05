@@ -1,4 +1,4 @@
-import { orderedListManager } from '@/Model/Cart/cart';
+import { orderedListManager } from '@/Model/OrderedList/orderedList';
 import { useManager } from '@/Model/manager';
 
 export const useOrderedList = () => {

@@ -1,4 +1,4 @@
-import { orderServiceManager } from '@/Model/Cart/cart';
+import { orderServiceManager } from '@/Service/orderService';
 import { useManager } from '@/Model/manager';
 
 export const useCartService = () => {
