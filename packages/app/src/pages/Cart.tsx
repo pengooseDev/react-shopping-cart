@@ -9,7 +9,7 @@ export const Cart = () => {
   const {
     items,
     checkedItems,
-    order,
+    orderConfirm,
     toggleChecked,
     toggleAllChecked,
     clearItems,
@@ -22,7 +22,7 @@ export const Cart = () => {
   const onOrder = () => {
     if (checkedTotalAmount === 0) return;
 
-    order();
+    orderConfirm();
     moveOrder();
   };
 

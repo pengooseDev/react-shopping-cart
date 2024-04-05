@@ -249,7 +249,7 @@ export class CartManager extends AtomManager<Cart> {
      * - 선택된 상품을 주문 목록으로 이동합니다.
      * - 선택된 상품을 장바구니에서 삭제합니다.
      */
-    order: atom(null, (_, set) => {
+    orderConfirm: atom(null, (_, set) => {
       set(this.atom, (prev: Cart) => {
         const newItems = new Map(prev.items);
         const newOrderItems = new Map(prev.orderItems);

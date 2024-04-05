@@ -12,7 +12,7 @@ export const useCart = () => {
       clearOrderItems,
       toggleChecked,
       toggleAllChecked,
-      order,
+      orderConfirm,
     },
   } = useManager(cartManager);
 
@@ -30,6 +30,6 @@ export const useCart = () => {
     clearOrderItems,
     toggleChecked,
     toggleAllChecked,
-    order,
+    orderConfirm,
   };
 };
