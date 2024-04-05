@@ -1,17 +1,19 @@
 import { CartManager } from '@/Model/Cart/cart';
 import { ProductOrder } from '@/components/order/ProductOrder';
 import { useCart, useNavigate } from '@/hooks';
+import { useCartService } from '@/hooks/useCartService';
 import { Formatter } from '@/utils/formatter';
 
 export const Order = () => {
-  const { orderItems, clearOrderItems } = useCart();
+  const { orderItems } = useCart();
+  const { order } = useCartService();
   const { moveList } = useNavigate();
   const totalAmount = CartManager.getTotalAmount(orderItems);
   const totalPrice = CartManager.getTotalPrice(orderItems);
 
   const onClickHandler = () => {
     moveList();
-    clearOrderItems();
+    order();
   };
 
   return (

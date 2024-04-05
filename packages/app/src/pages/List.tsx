@@ -4,10 +4,12 @@ import { useNavigate, useCart } from '@/hooks';
 import { Product as ProductData } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import { QUERY_CONFIG } from '@/api/queryConfig';
+import { useOrderedList } from '@/hooks/useOrderedList';
 
 export const List = () => {
   const { moveDetail } = useNavigate();
-  const { add } = useCart();
+  const { add, items } = useCart();
+  const { orderedList } = useOrderedList();
   const { data: listData } = useQuery(QUERY_CONFIG.PRODUCT.GET);
 
   return (
@@ -38,6 +40,25 @@ export const List = () => {
           </Product>
         );
       })}
+      <h1>장바구니 상품({items.length}개)</h1>
+      {items?.map((item) => (
+        <>
+          <div key={item.id}>{item.name}</div>
+          <div>{item.price}</div>
+          <div>{item.amount}</div>
+        </>
+      ))}
+
+      <h1>order 상품{orderedList.length}개</h1>
+      {orderedList?.map((items) =>
+        items.map((item) => (
+          <>
+            <div key={item.id}>{item.name}</div>
+            <div>{item.price}</div>
+            <div>{item.amount}</div>
+          </>
+        ))
+      )}
     </section>
   );
 };

@@ -359,3 +359,77 @@ const initialState: Cart = {
 };
 
 export const cartManager = new CartManager(initialState);
+
+/* OrderedList */
+interface OrderedListType {
+  orderedList: Map<number, Item[]>;
+}
+
+export class OrderedListManager extends AtomManager<OrderedListType> {
+  public selectors = {
+    orderedList: atom((get) => {
+      const { orderedList } = get(this.atom);
+
+      return Array.from(orderedList.values());
+    }),
+  };
+
+  public actions = {
+    addOrderList: atom(null, (_, set, items: Item[]) => {
+      set(this.atom, (prev: OrderedListType) => {
+        const newOrderedLists = new Map(prev.orderedList);
+        const newId = newOrderedLists.size + 1;
+
+        newOrderedLists.set(newId, items);
+
+        return {
+          ...prev,
+          orderedList: newOrderedLists,
+        };
+      });
+    }),
+  };
+}
+
+export const orderedListManager = new OrderedListManager({
+  orderedList: new Map(),
+});
+
+/* OrderService */
+interface OrderServiceType {
+  orderedList: OrderedListManager;
+  cart: CartManager;
+}
+
+// TODO: Service 전용 Manager도 만들기
+export class OrderService extends AtomManager<OrderServiceType> {
+  public cart: CartManager;
+  public orderedList: OrderedListManager;
+
+  constructor({ cart, orderedList }: OrderServiceType) {
+    // 흠.. 굳이 아톰으로 엮을 필요 없나..?
+    super({
+      cart,
+      orderedList,
+    });
+
+    // 이걸로 충분해보이는데
+    this.cart = cart;
+    this.orderedList = orderedList;
+  }
+
+  public selectors = {};
+
+  public actions = {
+    order: atom(null, (get, set) => {
+      const orderItemsValue = get(this.cart.selectors.orderItems);
+      set(this.orderedList.actions.addOrderList, orderItemsValue);
+      set(this.cart.actions.clearOrderItems);
+    }),
+  };
+}
+
+export const orderServiceManager = new OrderService({
+  cart: cartManager,
+  orderedList: orderedListManager,
+});
